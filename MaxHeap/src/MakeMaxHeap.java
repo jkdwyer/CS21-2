@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class MakeMaxHeap {
     public static void main(String args[]) {
-        // TODO:  remove this output.
+        // TODO:  remove this output. no really.
         // System.out.println("in MakeMaxHeap.main");
 
         MxHeap mH = new MxHeap();
