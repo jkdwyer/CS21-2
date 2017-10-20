@@ -79,7 +79,7 @@ public class MxHeap {
      */
     public void siftUp(ArrayList<Integer> arr, int endPos) {
         // TODO:  remove this output.
-        System.out.println("siftUp - endPos: " + endPos + " arr: " + arr + "\n");
+        // System.out.println("siftUp - endPos: " + endPos + " arr: " + arr + "\n");
         int childPos = endPos;
         while (childPos > stopPosition) {
             int parentPos = parent(childPos);

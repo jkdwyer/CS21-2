@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class MakeMaxHeap {
     public static void main(String args[]) {
         // TODO:  remove this output.
-        System.out.println("in MakeMaxHeap.main");
+        // System.out.println("in MakeMaxHeap.main");
 
         MxHeap mH = new MxHeap();
         ArrayList<Integer> heapArr = new ArrayList<Integer>();
