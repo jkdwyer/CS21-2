@@ -65,7 +65,7 @@ public class MxHeap {
     public void buildHeap(ArrayList<Integer> arr, int incomingPos) {
         // int sizePos = (arr.size()-1);
         int endPos = 1;    // initialize to leftChild of first element.
-        while (endPos < incomingPos) {
+        while (endPos <= incomingPos) {
             siftUp(arr, endPos);
             endPos++;
         }
