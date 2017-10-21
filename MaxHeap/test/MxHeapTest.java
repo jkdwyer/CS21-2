@@ -5,17 +5,6 @@ import java.util.ArrayList;
 public class MxHeapTest extends TestCase {
     public void testParent() throws Exception {
         MxHeap mH = new MxHeap();
-        ArrayList<Integer> heapArr = new ArrayList<Integer>();
-        heapArr.add(4);
-        heapArr.add(1);
-        heapArr.add(3);
-        heapArr.add(2);
-        heapArr.add(16);
-        heapArr.add(9);
-        heapArr.add(10);
-        heapArr.add(14);
-        heapArr.add(8);
-        heapArr.add(7);
         int parentOfPos0 = mH.parent(0);
         assertEquals(0, parentOfPos0);
         int parentOfPos1 = mH.parent(1);
@@ -40,17 +29,6 @@ public class MxHeapTest extends TestCase {
 
     public void testLeftChild() throws Exception {
         MxHeap mH = new MxHeap();
-        ArrayList<Integer> heapArr = new ArrayList<Integer>();
-        heapArr.add(4);
-        heapArr.add(1);
-        heapArr.add(3);
-        heapArr.add(2);
-        heapArr.add(16);
-        heapArr.add(9);
-        heapArr.add(10);
-        heapArr.add(14);
-        heapArr.add(8);
-        heapArr.add(7);
         int leftChildOfPos0 = mH.leftChild(0);
         assertEquals(1, leftChildOfPos0);
         int leftChildOfPos1 = mH.leftChild(1);
@@ -66,17 +44,6 @@ public class MxHeapTest extends TestCase {
 
     public void testRightChild() throws Exception {
         MxHeap mH = new MxHeap();
-        ArrayList<Integer> heapArr = new ArrayList<Integer>();
-        heapArr.add(4);
-        heapArr.add(1);
-        heapArr.add(3);
-        heapArr.add(2);
-        heapArr.add(16);
-        heapArr.add(9);
-        heapArr.add(10);
-        heapArr.add(14);
-        heapArr.add(8);
-        heapArr.add(7);
         int rightChildOfPos0 = mH.rightChild(0);
         assertEquals(2, rightChildOfPos0);
         int rightChildOfPos1 = mH.rightChild(1);
@@ -90,60 +57,26 @@ public class MxHeapTest extends TestCase {
 
     public void testSwap() throws Exception {
         MxHeap mH = new MxHeap();
-        ArrayList<Integer> heapArr = new ArrayList<Integer>();
-        heapArr.add(4);
-        heapArr.add(1);
-        heapArr.add(3);
-        heapArr.add(2);
-        heapArr.add(16);
-        heapArr.add(9);
-        heapArr.add(10);
-        heapArr.add(14);
-        heapArr.add(8);
-        heapArr.add(7);
-        mH.swap(heapArr,3,4);
-        int newPos3val = heapArr.get(3);
-        int newPos4val = heapArr.get(4);
+        mH.swap(3,4);
+        int newPos3val = mH.getArrAtPos(3);
+        int newPos4val = mH.getArrAtPos(4);
         assertEquals(2, newPos4val);
         assertEquals(16, newPos3val);
     }
 
-    public void testBuildHeap() throws Exception {
+    public void testHeapify() throws Exception {
         MxHeap mH = new MxHeap();
-        ArrayList<Integer> heapArr = new ArrayList<Integer>();
-        heapArr.add(4);
-        heapArr.add(1);
-        heapArr.add(3);
-        heapArr.add(2);
-        heapArr.add(16);
-        heapArr.add(9);
-        heapArr.add(10);
-        heapArr.add(14);
-        heapArr.add(8);
-        heapArr.add(7);
-        int maxPos = (heapArr.size()-1);
-        mH.buildHeap(heapArr, maxPos);
-        String expectedArr = "[16, 14, 10, 8, 2, 3, 9, 1, 4, 7]";
-        String actualArr = heapArr.toString();
+        mH.buildHeap(mH.getArrMaxPos());
+        String expectedArr = "[16, 14, 10, 8, 7, 3, 9, 1, 4, 2]";
+        String actualArr = mH.getHeapArr().toString();
         assertEquals(expectedArr, actualArr);
     }
 
     public void testSiftUp() throws Exception {
         MxHeap mH = new MxHeap();
-        ArrayList<Integer> heapArr = new ArrayList<Integer>();
-        heapArr.add(4);
-        heapArr.add(1);
-        heapArr.add(3);
-        heapArr.add(2);
-        heapArr.add(16);
-        heapArr.add(9);
-        heapArr.add(10);
-        heapArr.add(14);
-        heapArr.add(8);
-        heapArr.add(7);
-        mH.siftUp(heapArr,5);
+        mH.siftUp(5);
         String expectedArr = "[9, 1, 4, 2, 16, 3, 10, 14, 8, 7]";
-        String actualArr = heapArr.toString();
+        String actualArr = mH.getHeapArr().toString();
         assertEquals(expectedArr, actualArr);
     }
 }
