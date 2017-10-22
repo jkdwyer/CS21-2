@@ -11,6 +11,8 @@ public class MxHeap {
     private int arrMaxPos = 0;
     private int heapSize = 0;
     private ArrayList<Integer> heapArr = new ArrayList<Integer>();
+    private ArrayList<Integer> sortedArr = new ArrayList<Integer>();
+    private boolean isHeap = false;
 
     public MxHeap() {
         heapArr.add(4);
@@ -57,8 +59,24 @@ public class MxHeap {
         return heapArr;
     }
 
+    public ArrayList<Integer> getSortedArr() {
+        return sortedArr;
+    }
+
     public void printHeapArr() {
         System.out.println("heapArr: " + heapArr + "\n");
+    }
+
+    public void printSortedArr() {
+        System.out.println("sortedArr: " + sortedArr + "\n");
+    }
+
+    public boolean getIsHeap() {
+        return isHeap;
+    }
+
+    public int getSortAtPos(int index) {
+        return sortedArr.get(index);
     }
 
     /**
@@ -119,12 +137,13 @@ public class MxHeap {
      * @param incomingPos
      */
     public void buildHeap(int incomingPos) {
-        // int sizePos = (arr.size()-1);
-        int endPos = 1;    // initialize to leftChild of first element.
+        // initialize end position to leftChild of first element.
+        int endPos = 1;
         while (endPos <= incomingPos) {
             siftUp(endPos);
             endPos++;
         }
+        isHeap = true;
     }
 
     /**
@@ -154,10 +173,23 @@ public class MxHeap {
         int max = heapArr.get(0);
         ArrayList<Integer> sortedArr = new ArrayList<Integer>();
         heapArr.remove(0);
-        int newSize = heapArr.size();
-        int newIncomingPos = (newSize-1);
-        buildHeap(newIncomingPos);
+        // reset size and max position, then re-build the heap.
+        arrSize = heapArr.size();
+        arrMaxPos = (arrSize-1);
+        buildHeap(arrMaxPos);
         return max;
     }
 
-}
+    /**
+     * heapSort() method
+     * - take the heap and process each element into a sorted array.
+     * @return
+     */
+    public void heapSort() {
+        int maxPos = arrMaxPos;
+        for (int i = 0; i <= maxPos; i++) {
+            int topVal = extractMax();
+            sortedArr.add(i, topVal);
+        }
+    }
+}   // end MxHeap class.

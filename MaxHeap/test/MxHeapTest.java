@@ -1,6 +1,8 @@
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
+import java.io.PrintStream;
+import java.io.ByteArrayOutputStream;
 
 public class MxHeapTest extends TestCase {
     public void testParent() throws Exception {
@@ -78,5 +80,144 @@ public class MxHeapTest extends TestCase {
         String expectedArr = "[9, 1, 4, 2, 16, 3, 10, 14, 8, 7]";
         String actualArr = mH.getHeapArr().toString();
         assertEquals(expectedArr, actualArr);
+    }
+
+    public void testGetArrSize() throws Exception {
+        MxHeap mH = new MxHeap();
+        int size = mH.getArrSize();
+        assertEquals(size, 10);
+    }
+
+    public void testGetArrMaxPos() throws Exception {
+        MxHeap mH = new MxHeap();
+        int max = mH.getArrMaxPos();
+        assertEquals(max, 9);
+    }
+
+    public void testGetArrAtPos() throws Exception {
+        MxHeap mH = new MxHeap();
+        int value = mH.getArrAtPos(3);
+        assertEquals(value, 2);
+        value = mH.getArrAtPos(6);
+        assertEquals(value, 10);
+    }
+
+    public void testSetArrAtPos() throws Exception {
+        MxHeap mH = new MxHeap();
+        int value = mH.getArrAtPos(3);
+        assertEquals(value, 2);
+        mH.setArrAtPos(3, 5);
+        value = mH.getArrAtPos(3);
+        assertEquals(value, 5);
+    }
+
+    public void testGetIsHeap() throws Exception {
+        MxHeap mH = new MxHeap();
+        boolean value = mH.getIsHeap();
+        assertEquals(value, false);
+        mH.buildHeap(9);
+        value = mH.getIsHeap();
+        assertEquals(value, true);
+    }
+
+    public void testGetHeapArr() throws Exception {
+        MxHeap mH = new MxHeap();
+        mH.buildHeap(9);
+        ArrayList<Integer> newArr = mH.getHeapArr();
+        assertEquals(newArr.toString(), mH.getHeapArr().toString());
+    }
+
+    public void testGetSortedArr() throws Exception {
+        MxHeap mH = new MxHeap();
+        mH.heapSort();
+        ArrayList<Integer> newArr = mH.getSortedArr();
+        assertEquals(newArr.toString(), mH.getSortedArr().toString());
+    }
+
+    public void testGetExtractMax() throws Exception {
+        MxHeap mH = new MxHeap();
+        mH.buildHeap(9);
+        int top = mH.extractMax();
+        assertEquals(top, 16);
+    }
+
+    public void testHeapSort() throws Exception {
+        MxHeap mH = new MxHeap();
+        mH.buildHeap(9);
+        mH.heapSort();
+        int value;
+        value = mH.getSortAtPos(0);
+        assertEquals(16, value);
+        value = mH.getSortAtPos(1);
+        assertEquals(14, value);
+        value = mH.getSortAtPos(2);
+        assertEquals(10, value);
+        value = mH.getSortAtPos(3);
+        assertEquals(9, value);
+        value = mH.getSortAtPos(4);
+        assertEquals(8, value);
+        value = mH.getSortAtPos(5);
+        assertEquals(7, value);
+        value = mH.getSortAtPos(6);
+        assertEquals(4, value);
+        value = mH.getSortAtPos(7);
+        assertEquals(3, value);
+        value = mH.getSortAtPos(8);
+        assertEquals(2, value);
+        value = mH.getSortAtPos(9);
+        assertEquals(1, value);
+    }
+
+    public void testPrintSortedArr() throws Exception {
+        MxHeap mH = new MxHeap();
+        mH.buildHeap(9);
+        mH.heapSort();
+        String expected = "sortedArr: [16, 14, 10, 9, 8, 7, 4, 3, 2, 1]\n\n";
+
+        // assign the existing PrintStream to a variable.
+        PrintStream oldStream = System.out;
+        // instantiate a BAOS.
+        ByteArrayOutputStream myOut = new ByteArrayOutputStream();
+        // give a new PrintStream the BAOS object as input.
+        PrintStream ps = new PrintStream(myOut);
+        // send the system output to the new PrintStream object.
+        System.setOut(ps);
+
+        // the print method goes to system out.
+        mH.printSortedArr();
+
+        // the BAOS object gets the output data.
+        String actual = myOut.toString();
+        assertEquals(expected, actual);
+
+        // return the former system output to normal.
+        System.out.flush();
+        System.setOut(oldStream);
+    }
+
+    public void testPrintHeapArr() throws Exception {
+        MxHeap mH = new MxHeap();
+        mH.buildHeap(9);
+        String expected = "heapArr: [16, 14, 10, 8, 7, 3, 9, 1, 4, 2]\n\n";
+
+        // assign the existing PrintStream to a variable.
+        PrintStream oldStream = System.out;
+        // instantiate a BAOS object.
+        ByteArrayOutputStream myOut = new ByteArrayOutputStream();
+        // give a new PrintStream the BAOS object as input.
+        PrintStream ps = new PrintStream(myOut);
+        // send the system output to the new PrintStream object.
+        System.setOut(ps);
+
+        // the print method goes to system out.
+        mH.printHeapArr();
+
+        // the BAOS object gets the output data.
+        String actual = myOut.toString();
+        assertEquals(expected, actual);
+
+        // return the former system output to normal.
+        System.out.flush();
+        System.setOut(oldStream);
     }
 }
