@@ -187,16 +187,29 @@ public class MxHeapTest extends TestCase {
 
     public void testGetSortedArr() throws Exception {
         MxHeap mH = new MxHeap();
+        mH.buildHeap();
         mH.heapSort();
         ArrayList<Integer> newArr = mH.getSortedArr();
         assertEquals(newArr.toString(), mH.getSortedArr().toString());
     }
 
-    public void testGetExtractMax() throws Exception {
+    public void testExtractMax() throws Exception {
         MxHeap mH = new MxHeap();
         mH.buildHeap();
         int top = mH.extractMax();
         assertEquals(top, 16);
+    }
+
+    public void testExtractMax_Exception() throws Exception {
+        MxHeap mH = new MxHeap();
+        String message = "";
+        String expected = "Error: extractMax() can only be used on a completed heap.";
+        try {
+            mH.extractMax();
+        } catch (Exception e) {
+            message = e.getMessage();
+        }
+        assertEquals(expected, message);
     }
 
     public void testHeapSort() throws Exception {
@@ -226,6 +239,18 @@ public class MxHeapTest extends TestCase {
         assertEquals(1, value);
     }
 
+    public void testHeapSort_Exception() throws Exception {
+        MxHeap mH = new MxHeap();
+        String message = "";
+        String expected = "Error: heapSort() can only be used on a completed heap.";
+        try {
+            mH.heapSort();
+        } catch (Exception e) {
+            message = e.getMessage();
+        }
+        assertEquals(expected, message);
+    }
+
     public void testHeapInsert() throws Exception {
         MxHeap mH = new MxHeap();
         mH.heapify(4);
@@ -237,5 +262,39 @@ public class MxHeapTest extends TestCase {
         mH2.heapInsert(8);
         String expected2 = "[16, 4, 8, 1, 2, 3, 9, 10, 14, 7]";
         assertEquals(expected2, mH2.getHeapArr().toString());
+    }
+
+    public void testHeapInsert_Exception() throws Exception {
+        MxHeap mH = new MxHeap();
+        String message = "";
+        String expected = "Error:  heapInsert() can only be used on a partial heap.";
+        try {
+            mH.heapInsert(8);
+        } catch (Exception e) {
+            message = e.getMessage();
+        }
+        assertEquals(expected, message);
+    }
+
+    public void testHeapAddNewValue() throws Exception {
+        MxHeap mH = new MxHeap();
+        mH.buildHeap();
+        String expected = "[16, 14, 10, 8, 12, 3, 9, 1, 4, 2, 7]";
+        int newVal = 12;
+        mH.heapAddNewValue(newVal);
+        assertEquals(expected, mH.getHeapArr().toString());
+    }
+
+    public void testHeapAddNewValue_Exception() throws Exception {
+        MxHeap mH = new MxHeap();
+        int newVal = 12;
+        String message = "";
+        String expected = "Error: heapAddNewValue() can only be used on a completed heap.";
+        try {
+            mH.heapAddNewValue(newVal);
+        } catch (Exception e) {
+            message = e.getMessage();
+        }
+        assertEquals(expected, message);
     }
 }

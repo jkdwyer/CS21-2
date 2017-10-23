@@ -14,6 +14,7 @@ public class MxHeap {
     private ArrayList<Integer> sortedArr = new ArrayList<Integer>();
     private boolean isHeap = false;
     private boolean isHeapified = false;
+    private boolean isSorted = false;
     private int heapifiedSize = 0;
 
     public MxHeap() {
@@ -77,14 +78,21 @@ public class MxHeap {
         return isHeapified;
     }
 
+    public boolean getIsSorted() {
+        return isSorted;
+    }
+
     public int getSortAtPos(int index) {
         return sortedArr.get(index);
     }
 
-    public int getMax() throws Exception {
-        if (!isHeap) {
-            throw new Exception("Error: Must have a heap to return a maximum.");
-        }
+    /**
+     * peek() method
+     * - does not alter data, so it can be used on any ArrayList.
+     * @return  element in first position of ArrayList.
+     * @throws Exception
+     */
+    public int peek() throws Exception {
         return heapArr.get(0);
     }
 
@@ -135,7 +143,7 @@ public class MxHeap {
      * @param pos1
      * @param pos2
      */
-    public void swap (int pos1, int pos2) {
+    public void swap(int pos1, int pos2) {
         int val1 = heapArr.get(pos1);
         int val2 = heapArr.get(pos2);
         heapArr.set(pos1, val2);
@@ -165,8 +173,7 @@ public class MxHeap {
 
     /**
      * buildHeap() method
-     * - gets called once with last position in array as incomingPos
-     *      and creates a complete heap from the incoming ArrayList.
+     * - gets called once and creates a complete heap from heapArr.
      */
     public void buildHeap() {
         // initialize end position to leftChild of first element.
@@ -178,6 +185,7 @@ public class MxHeap {
         isHeap = true;
         heapSize = arrSize;
     }
+
 
     /**
      * siftUp() method
@@ -204,57 +212,95 @@ public class MxHeap {
         }
     }
 
-    public int extractMax() {
-        int max = heapArr.get(0);
-        ArrayList<Integer> sortedArr = new ArrayList<Integer>();
-        heapArr.remove(0);
-        // reset size and max position, then re-build the heap.
-        arrSize = heapArr.size();
-        arrMaxPos = (arrSize-1);
-        buildHeap();
-        return max;
+
+    public int extractMax() throws Exception {
+        if (isHeap) {
+            int max = heapArr.get(0);
+            ArrayList<Integer> sortedArr = new ArrayList<Integer>();
+            heapArr.remove(0);
+            // reset size and max position, then re-build the heap.
+            arrSize = heapArr.size();
+            arrMaxPos = (arrSize-1);
+            buildHeap();
+            return max;
+        } else {
+            throw new Exception("Error: extractMax() can only be used on a completed heap.");
+        }
     }
+
 
     /**
      * heapSort() method
      * - take the heap and process each element into a sorted array.
-     * @return
+     * - method should only be allowed to work on a completed heap.
      */
-    public void heapSort() {
-        int maxPos = arrMaxPos;
-        for (int i = 0; i <= maxPos; i++) {
-            int topVal = extractMax();
-            sortedArr.add(i, topVal);
+    public void heapSort() throws Exception {
+        if (isHeap) {
+            int maxPos = arrMaxPos;
+            for (int i = 0; i <= maxPos; i++) {
+                int topVal = extractMax();
+                sortedArr.add(i, topVal);
+            }
+            isSorted = true;
+        } else {
+            throw new Exception("Error: heapSort() can only be used on a completed heap.");
         }
     }
+
 
     /**
      * heapInsert() method
      * - method is adding elements from end of heapArr to partial heap
      *      in the same array, so it accepts a position argument.
+     * - method should only be allowed to work on a partial heap.
      * @param pos
      */
-    public void heapInsert(int pos) {
-        if (pos == heapifiedSize) {
-            // pos is next element.
-            heapify(heapifiedSize);
-        } else {
-            // pos is any subsequent element.
-            int desVal = heapArr.get(pos);
-            int hsVal = heapArr.get(heapifiedSize);
-            heapArr.set(heapifiedSize, desVal);
-            int j = 1;
-            int nextVal = hsVal;
-            while ((heapifiedSize+j) <= pos) {
-                hsVal = heapArr.get(heapifiedSize+j);
-                heapArr.set((heapifiedSize+j), nextVal);
-                nextVal = hsVal;
-                j++;
+    public void heapInsert(int pos) throws Exception {
+        if (isHeapified) {
+            if (pos == heapifiedSize) {
+                // pos is next element.
+                heapify(heapifiedSize);
+            } else {
+                // pos is any subsequent element.
+                int desVal = heapArr.get(pos);
+                int hsVal = heapArr.get(heapifiedSize);
+                heapArr.set(heapifiedSize, desVal);
+                int j = 1;
+                int nextVal = hsVal;
+                while ((heapifiedSize+j) <= pos) {
+                    hsVal = heapArr.get(heapifiedSize+j);
+                    heapArr.set((heapifiedSize+j), nextVal);
+                    nextVal = hsVal;
+                    j++;
+                }
+                // TODO:  remove this output.
+                // System.out.println("heapArr: " + heapArr + "\n");
+                // now that desVal is the next element...
+                heapify(heapifiedSize);
             }
+        } else {
+            throw new Exception ("Error:  heapInsert() can only be used on a partial heap.");
+        }
+    }
+
+
+    /**
+     * heapAddNewValue() method
+     * - method takes a new element value from an outside source
+     *      and adds it to a completed heap.
+     * - method should only be allowed to work on a completed heap.
+     * @param value
+     */
+    public void heapAddNewValue(int value) throws Exception {
+        if (isHeap) {
             // TODO:  remove this output.
-            // System.out.println("heapArr: " + heapArr + "\n");
-            // now that desVal is the next element...
-            heapify(heapifiedSize);
+            // System.out.println("value: " + value + "\n");
+            heapArr.add(value);
+            arrSize = heapArr.size();
+            arrMaxPos = (arrSize-1);
+            buildHeap();
+        } else {
+            throw new Exception("Error: heapAddNewValue() can only be used on a completed heap.");
         }
     }
 }   // end MxHeap class.
