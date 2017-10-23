@@ -13,6 +13,8 @@ public class MxHeap {
     private ArrayList<Integer> heapArr = new ArrayList<Integer>();
     private ArrayList<Integer> sortedArr = new ArrayList<Integer>();
     private boolean isHeap = false;
+    private boolean isHeapified = false;
+    private int heapifiedSize = 0;
 
     public MxHeap() {
         heapArr.add(4);
@@ -47,6 +49,10 @@ public class MxHeap {
         return heapSize;
     }
 
+    public int getHeapifiedSize() {
+        return heapifiedSize;
+    }
+
     public int getArrAtPos(int index) {
         return heapArr.get(index);
     }
@@ -63,20 +69,23 @@ public class MxHeap {
         return sortedArr;
     }
 
-    public void printHeapArr() {
-        System.out.println("heapArr: " + heapArr + "\n");
-    }
-
-    public void printSortedArr() {
-        System.out.println("sortedArr: " + sortedArr + "\n");
-    }
-
     public boolean getIsHeap() {
         return isHeap;
     }
 
+    public boolean getIsHeapified() {
+        return isHeapified;
+    }
+
     public int getSortAtPos(int index) {
         return sortedArr.get(index);
+    }
+
+    public int getMax() throws Exception {
+        if (!isHeap) {
+            throw new Exception("Error: Must have a heap to return a maximum.");
+        }
+        return heapArr.get(0);
     }
 
     /**
@@ -95,6 +104,7 @@ public class MxHeap {
         return parentPos;
     }
 
+
     /**
      * leftChild() method
      * - left child calculation for arrays starting at position zero.
@@ -106,6 +116,7 @@ public class MxHeap {
         return leftPos;
     }
 
+
     /**
      * rightChild() method
      * - right child calculation for arrays starting at position zero.
@@ -116,6 +127,7 @@ public class MxHeap {
         int rightPos = ((2*pos)+2);
         return rightPos;
     }
+
 
     /**
      * swap() method
@@ -130,20 +142,41 @@ public class MxHeap {
         heapArr.set(pos2, val1);
     }
 
+
     /**
-     * buildHeap() method
-     * - gets called once with last position in array as incomingPos
-     *      and creates a complete heap from the incoming ArrayList.
+     * heapify() method
+     * - gets called once with any position in array, then
+     *      creates a partial heap from position zero to incomingPos,
+     *      leaving position incomingPos+1 through arrMaxPos untouched.
      * @param incomingPos
      */
-    public void buildHeap(int incomingPos) {
+    public void heapify(int incomingPos) {
         // initialize end position to leftChild of first element.
-        int endPos = 1;
+        int endPos = leftChild(stopPosition);
+        // TODO:  make this work for partial heap.
         while (endPos <= incomingPos) {
             siftUp(endPos);
             endPos++;
         }
+        isHeapified = true;
+        heapifiedSize = (incomingPos+1);
+    }
+
+
+    /**
+     * buildHeap() method
+     * - gets called once with last position in array as incomingPos
+     *      and creates a complete heap from the incoming ArrayList.
+     */
+    public void buildHeap() {
+        // initialize end position to leftChild of first element.
+        int endPos = leftChild(stopPosition);
+        while (endPos <= arrMaxPos) {
+            siftUp(endPos);
+            endPos++;
+        }
         isHeap = true;
+        heapSize = arrSize;
     }
 
     /**
@@ -160,6 +193,8 @@ public class MxHeap {
             if (heapArr.get(childPos) > heapArr.get(parentPos)) {
                 swap(parentPos, childPos);
                 childPos = parentPos;
+                // TODO:  remove this output.
+                // System.out.println("recursive call");
                 // recursive call.
                 siftUp(childPos);
             } else {
@@ -176,7 +211,7 @@ public class MxHeap {
         // reset size and max position, then re-build the heap.
         arrSize = heapArr.size();
         arrMaxPos = (arrSize-1);
-        buildHeap(arrMaxPos);
+        buildHeap();
         return max;
     }
 
@@ -190,6 +225,36 @@ public class MxHeap {
         for (int i = 0; i <= maxPos; i++) {
             int topVal = extractMax();
             sortedArr.add(i, topVal);
+        }
+    }
+
+    /**
+     * heapInsert() method
+     * - method is adding elements from end of heapArr to partial heap
+     *      in the same array, so it accepts a position argument.
+     * @param pos
+     */
+    public void heapInsert(int pos) {
+        if (pos == heapifiedSize) {
+            // pos is next element.
+            heapify(heapifiedSize);
+        } else {
+            // pos is any subsequent element.
+            int desVal = heapArr.get(pos);
+            int hsVal = heapArr.get(heapifiedSize);
+            heapArr.set(heapifiedSize, desVal);
+            int j = 1;
+            int nextVal = hsVal;
+            while ((heapifiedSize+j) <= pos) {
+                hsVal = heapArr.get(heapifiedSize+j);
+                heapArr.set((heapifiedSize+j), nextVal);
+                nextVal = hsVal;
+                j++;
+            }
+            // TODO:  remove this output.
+            // System.out.println("heapArr: " + heapArr + "\n");
+            // now that desVal is the next element...
+            heapify(heapifiedSize);
         }
     }
 }   // end MxHeap class.
